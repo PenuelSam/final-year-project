@@ -1,103 +1,193 @@
-import Image from "next/image";
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { BookOpen, Search, Users } from "lucide-react"
+import { getLatestVolumes, getFeaturedVolumes } from "@/lib/data"
 
-export default function Home() {
+export default function HomePage() {
+  const latestVolumes = getLatestVolumes(3)
+  const featuredVolumes = getFeaturedVolumes(3)
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="flex flex-col min-h-screen">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white py-20 lg:py-32">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">Waja Journal</h1>
+            <p className="text-xl lg:text-2xl mb-4 text-slate-200">Advancing Knowledge in Anthropology & Archaeology</p>
+            <p className="text-lg mb-8 text-slate-300 max-w-2xl mx-auto">
+              Explore 42 volumes of cutting-edge research, cultural insights, and archaeological discoveries from the
+              Department of Anthropology & Archaeology.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700">
+                <Link href="/volumes">
+                  <BookOpen className="mr-2 h-5 w-5" />
+                  Browse Volumes
+                </Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="border-white text-white hover:bg-white hover:text-slate-900"
+              >
+                <Link href="/search">
+                  <Search className="mr-2 h-5 w-5" />
+                  Search Articles
+                </Link>
+              </Button>
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-16 bg-slate-50">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="text-center">
+              <div className="text-4xl font-bold text-blue-600 mb-2">42</div>
+              <div className="text-slate-600">Journal Volumes</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-blue-600 mb-2">500+</div>
+              <div className="text-slate-600">Research Articles</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-blue-600 mb-2">25+</div>
+              <div className="text-slate-600">Years of Publication</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Latest Volumes */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Latest Volumes</h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              Discover our most recent publications featuring groundbreaking research and discoveries.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {latestVolumes.map((volume) => (
+              <Card key={volume.id} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="flex justify-between items-start mb-2">
+                    <Badge variant="secondary">Volume {volume.number}</Badge>
+                    <span className="text-sm text-slate-500">{volume.year}</span>
+                  </div>
+                  <CardTitle className="text-lg">{volume.title}</CardTitle>
+                  <CardDescription>{volume.summary}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-500">{volume.articles} articles</span>
+                    <Button asChild variant="outline" size="sm">
+                      <Link href={`/volumes/${volume.slug}`}>View Volume</Link>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <Button asChild variant="outline">
+              <Link href="/volumes">View All Volumes</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Volumes */}
+      <section className="py-16 bg-slate-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Featured Research</h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              Highlighted volumes showcasing exceptional contributions to anthropological and archaeological knowledge.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {featuredVolumes.map((volume) => (
+              <Card key={volume.id} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="flex justify-between items-start mb-2">
+                    <Badge className="bg-amber-100 text-amber-800">Featured</Badge>
+                    <span className="text-sm text-slate-500">{volume.year}</span>
+                  </div>
+                  <CardTitle className="text-lg">{volume.title}</CardTitle>
+                  <CardDescription>{volume.summary}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-500">Volume {volume.number}</span>
+                    <Button asChild variant="outline" size="sm">
+                      <Link href={`/volumes/${volume.slug}`}>Explore</Link>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Department Info */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <Users className="h-16 w-16 text-blue-600 mx-auto mb-6" />
+            <h2 className="text-3xl font-bold mb-6">Department of Anthropology & Archaeology</h2>
+            <p className="text-lg text-slate-600 mb-8 leading-relaxed">
+              Our department is dedicated to advancing understanding of human culture, society, and history through
+              rigorous research and scholarly publication. The Waja Journal serves as a premier platform for
+              disseminating cutting-edge research in anthropological and archaeological studies.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild variant="outline">
+                <Link href="/department">Learn More About Us</Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="/contact">Get in Touch</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 bg-blue-600 text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-4">Ready to Explore?</h2>
+          <p className="text-xl mb-8 text-blue-100">
+            Dive into decades of anthropological and archaeological research.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild size="lg" variant="secondary">
+              <Link href="/volumes">
+                <BookOpen className="mr-2 h-5 w-5" />
+                Browse All Volumes
+              </Link>
+            </Button>
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="border-white text-white hover:bg-white hover:text-blue-600"
+            >
+              <Link href="/search">
+                <Search className="mr-2 h-5 w-5" />
+                Advanced Search
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
     </div>
-  );
+  )
 }
