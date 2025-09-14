@@ -23,6 +23,21 @@ export default function SearchPage() {
   const uniqueYears = [...new Set(allVolumes.map((v) => v.year))].sort((a, b) => b - a)
   const allTopics = [...new Set(allVolumes.flatMap((v) => v.topics))].sort()
 
+
+    const getRelevanceScore = (volume: Volume, term: string) => {
+    const lowerTerm = term.toLowerCase()
+    let score = 0
+
+    if (volume.title.toLowerCase().includes(lowerTerm)) score += 10
+    if (volume.summary.toLowerCase().includes(lowerTerm)) score += 5
+    if (volume.editor.toLowerCase().includes(lowerTerm)) score += 3
+    volume.topics.forEach((topic: string) => {
+      if (topic.toLowerCase().includes(lowerTerm)) score += 2
+    })
+
+    return score
+  }
+
   const filteredVolumes = useMemo(() => {
     const filtered = allVolumes.filter((volume) => {
       const matchesSearch =
@@ -70,19 +85,7 @@ export default function SearchPage() {
 
  
 
-  const getRelevanceScore = (volume: Volume, term: string) => {
-    const lowerTerm = term.toLowerCase()
-    let score = 0
 
-    if (volume.title.toLowerCase().includes(lowerTerm)) score += 10
-    if (volume.summary.toLowerCase().includes(lowerTerm)) score += 5
-    if (volume.editor.toLowerCase().includes(lowerTerm)) score += 3
-    volume.topics.forEach((topic: string) => {
-      if (topic.toLowerCase().includes(lowerTerm)) score += 2
-    })
-
-    return score
-  }
 
   const toggleYear = (year: string) => {
     setSelectedYears((prev) => (prev.includes(year) ? prev.filter((y) => y !== year) : [...prev, year]))
