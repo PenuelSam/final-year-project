@@ -47,18 +47,18 @@ export default function VolumePage({ params }: { params: { slug: string } }) {
 
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-3 mb-8">
-            <Button className="bg-blue-600 hover:bg-blue-700">
+            {/* <Button className="bg-blue-600 hover:bg-blue-700">
               <Download className="mr-2 h-4 w-4" />
               Download PDF
-            </Button>
-            <Button variant="outline">
+            </Button> */}
+            {/* <Button variant="outline">
               <BookOpen className="mr-2 h-4 w-4" />
               Read Online
             </Button>
             <Button variant="outline">
               <ExternalLink className="mr-2 h-4 w-4" />
               Request Access
-            </Button>
+            </Button> */}
           </div>
 
           {/* Table of Contents */}

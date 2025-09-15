@@ -32,7 +32,7 @@ export default function HomePage() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="border-white text-white hover:bg-white hover:text-slate-900"
+                className="border-white text-black hover:bg-white hover:text-slate-900"
               >
                 <Link href="/search">
                   <Search className="mr-2 h-5 w-5" />
@@ -148,20 +148,20 @@ export default function HomePage() {
               rigorous research and scholarly publication. The Waja Journal serves as a premier platform for
               disseminating cutting-edge research in anthropological and archaeological studies.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            {/* <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild variant="outline">
                 <Link href="/department">Learn More About Us</Link>
               </Button>
               <Button asChild variant="outline">
                 <Link href="/contact">Get in Touch</Link>
               </Button>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-blue-600 text-white">
+      <section className="py-16 bg-slate-900 text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Explore?</h2>
           <p className="text-xl mb-8 text-blue-100">
@@ -178,7 +178,7 @@ export default function HomePage() {
               asChild
               size="lg"
               variant="outline"
-              className="border-white text-white hover:bg-white hover:text-blue-600"
+              className="border-white text-black hover:bg-white hover:text-blue-600"
             >
               <Link href="/search">
                 <Search className="mr-2 h-5 w-5" />

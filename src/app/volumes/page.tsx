@@ -146,9 +146,9 @@ export default function VolumesPage() {
                       View
                     </Link>
                   </Button>
-                  <Button variant="outline" size="sm">
+                  {/* <Button variant="outline" size="sm">
                     <Download className="h-4 w-4" />
-                  </Button>
+                  </Button> */}
                 </div>
               </div>
             </CardContent>
