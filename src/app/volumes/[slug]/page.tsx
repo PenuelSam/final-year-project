@@ -4,20 +4,19 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Download, ExternalLink, BookOpen, Calendar, User, Hash } from "lucide-react"
-import { getVolumeBySlug, getRelatedVolumes } from "@/lib/data"
+import { getVolumeBySlug, getRelatedVolumes, getAllVolumes } from "@/lib/data"
 
-interface VolumePageProps {
-  params: {
-    slug: string
-  }
+
+
+// Explicitly type generateStaticParams to avoid Promise<any>
+export function generateStaticParams(): { slug: string }[] {
+  return getAllVolumes().map((v) => ({ slug: v.slug }))
 }
 
-export default function VolumePage({ params }: VolumePageProps) {
+// Page component (non-async)
+export default function VolumePage({ params }: { params: { slug: string } }) {
   const volume = getVolumeBySlug(params.slug)
-
-  if (!volume) {
-    notFound()
-  }
+  if (!volume) notFound()
 
   const relatedVolumes = getRelatedVolumes(volume.id, 3)
 
