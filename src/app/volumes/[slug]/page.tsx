@@ -5,14 +5,65 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, BookOpen, Calendar, User, Hash } from "lucide-react"
 import { fetchVolumes, findVolumeBySlug, selectRelatedVolumes } from "@/lib/data"
+import type { Metadata } from "next"
 
 export const dynamic = "force-dynamic"
 
+// ✅ Dynamic SEO metadata for each volume
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const volumes = await fetchVolumes()
+  const volume = findVolumeBySlug(volumes, slug)
 
+  if (!volume) {
+    return {
+      title: "Volume Not Found | Waja Journal",
+      description: "This Waja Journal volume could not be found.",
+    }
+  }
 
+  return {
+    title: `${volume.title} | Waja Journal Volume ${volume.number}`,
+    description: `${volume.summary} — Published in ${volume.year}, edited by ${volume.editor}. Explore anthropological and archaeological research from the Waja Journal.`,
+    keywords: [
+      `Waja Journal Volume ${volume.number}`,
+      volume.editor,
+      "Anthropology",
+      "Archaeology",
+      "Nigeria",
+      ...volume.topics,
+    ],
+    openGraph: {
+      title: `${volume.title} | Waja Journal Volume ${volume.number}`,
+      description: volume.summary,
+      url: `https://waja-inventory.vercel.app/volumes/${volume.slug}`,
+      siteName: "Waja Journal",
+      images: [
+        {
+          url: "https://waja-inventory.vercel.app/og-image.png",
+          width: 1200,
+          height: 630,
+          alt: `Waja Journal Volume ${volume.number}`,
+        },
+      ],
+      locale: "en_US",
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${volume.title} | Waja Journal`,
+      description: volume.summary,
+      images: ["https://waja-inventory.vercel.app/og-image.png"],
+    },
+  }
+}
 
 export default async function VolumePage({ params }: { params: Promise<{ slug: string }> }) {
- const { slug } = await params
+  const { slug } = await params
   const volumes = await fetchVolumes()
   const volume = findVolumeBySlug(volumes, slug)
   if (!volume) notFound()
@@ -44,22 +95,6 @@ export default async function VolumePage({ params }: { params: Promise<{ slug: s
             <p className="text-lg text-slate-600 leading-relaxed">{volume.summary}</p>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex flex-wrap gap-3 mb-8">
-            {/* <Button className="bg-blue-600 hover:bg-blue-700">
-              <Download className="mr-2 h-4 w-4" />
-              Download PDF
-            </Button> */}
-            {/* <Button variant="outline">
-              <BookOpen className="mr-2 h-4 w-4" />
-              Read Online
-            </Button>
-            <Button variant="outline">
-              <ExternalLink className="mr-2 h-4 w-4" />
-              Request Access
-            </Button> */}
-          </div>
-
           {/* Table of Contents */}
           <Card className="mb-8">
             <CardHeader>
@@ -79,7 +114,7 @@ export default async function VolumePage({ params }: { params: Promise<{ slug: s
             </CardContent>
           </Card>
 
-          {/* Abstract/Description */}
+          {/* About Section */}
           <Card className="mb-8">
             <CardHeader>
               <CardTitle>About This Volume</CardTitle>
@@ -97,8 +132,8 @@ export default async function VolumePage({ params }: { params: Promise<{ slug: s
             <CardContent>
               <div className="bg-slate-50 p-4 rounded-lg">
                 <p className="text-sm font-mono text-slate-700">
-                  {volume.editor} (Ed.). ({volume.year}). <em>{volume.title}</em>. Waja Journal, Volume {volume.number}.
-                  Department of Anthropology & Archaeology.
+                  {volume.editor} (Ed.). ({volume.year}). <em>{volume.title}</em>. Waja Journal, Volume{" "}
+                  {volume.number}. Department of Anthropology & Archaeology.
                   {volume.isbn && ` ISBN: ${volume.isbn}`}
                 </p>
               </div>

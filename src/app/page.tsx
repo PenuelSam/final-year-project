@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { Metadata } from "next"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -6,6 +7,45 @@ import { BookOpen, Search, Users } from "lucide-react"
 import { fetchVolumes, selectFeaturedVolumes, selectLatestVolumes } from "@/lib/data"
 
 export const dynamic = "force-dynamic"
+
+export const metadata: Metadata = {
+  title: "Waja Journal | Department of Anthropology & Archaeology",
+  description:
+    "Explore the Waja Journal – a scholarly publication from the Department of Anthropology & Archaeology, featuring volumes of research, cultural insights, and archaeological discoveries.",
+  keywords: [
+    "Waja Journal",
+    "Anthropology",
+    "Archaeology",
+    "Research",
+    "Nigeria",
+    "Academic Journal",
+    "Human culture",
+  ],
+  openGraph: {
+    title: "Waja Journal | Department of Anthropology & Archaeology",
+    description:
+      "Access decades of anthropological and archaeological research through the Waja Journal volumes.",
+    url: "https://waja-inventory.vercel.app",
+    siteName: "Waja Journal",
+    images: [
+      {
+        url: "https://waja-inventory.vercel.app/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Waja Journal Preview",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Waja Journal | Department of Anthropology & Archaeology",
+    description:
+      "Explore the Waja Journal – decades of anthropological and archaeological scholarship.",
+    images: ["https://waja-inventory.vercel.app/og-image.png"],
+  },
+}
 
 export default async function HomePage() {
   const volumes = await fetchVolumes()
@@ -18,11 +58,16 @@ export default async function HomePage() {
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white py-20 lg:py-32">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">Waja Journal</h1>
-            <p className="text-xl lg:text-2xl mb-4 text-slate-200">Advancing Knowledge in Anthropology & Archaeology</p>
+            <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
+              Waja Journal
+            </h1>
+            <p className="text-xl lg:text-2xl mb-4 text-slate-200">
+              Advancing Knowledge in Anthropology & Archaeology
+            </p>
             <p className="text-lg mb-8 text-slate-300 max-w-2xl mx-auto">
-              Explore 42 volumes of cutting-edge research, cultural insights, and archaeological discoveries from the
-              Department of Anthropology & Archaeology.
+              Explore 42 volumes of cutting-edge research, cultural insights,
+              and archaeological discoveries from the Department of
+              Anthropology & Archaeology.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700">
@@ -73,7 +118,8 @@ export default async function HomePage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Latest Volumes</h2>
             <p className="text-slate-600 max-w-2xl mx-auto">
-              Discover our most recent publications featuring groundbreaking research and discoveries.
+              Discover our most recent publications featuring groundbreaking
+              research and discoveries.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -89,7 +135,9 @@ export default async function HomePage() {
                 </CardHeader>
                 <CardContent>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-slate-500">{volume.articles} articles</span>
+                    <span className="text-sm text-slate-500">
+                      {volume.articles} articles
+                    </span>
                     <Button asChild variant="outline" size="sm">
                       <Link href={`/volumes/${volume.slug}`}>View Volume</Link>
                     </Button>
@@ -112,7 +160,8 @@ export default async function HomePage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Featured Research</h2>
             <p className="text-slate-600 max-w-2xl mx-auto">
-              Highlighted volumes showcasing exceptional contributions to anthropological and archaeological knowledge.
+              Highlighted volumes showcasing exceptional contributions to
+              anthropological and archaeological knowledge.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -128,7 +177,9 @@ export default async function HomePage() {
                 </CardHeader>
                 <CardContent>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-slate-500">Volume {volume.number}</span>
+                    <span className="text-sm text-slate-500">
+                      Volume {volume.number}
+                    </span>
                     <Button asChild variant="outline" size="sm">
                       <Link href={`/volumes/${volume.slug}`}>Explore</Link>
                     </Button>
@@ -145,20 +196,16 @@ export default async function HomePage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <Users className="h-16 w-16 text-blue-600 mx-auto mb-6" />
-            <h2 className="text-3xl font-bold mb-6">Department of Anthropology & Archaeology</h2>
+            <h2 className="text-3xl font-bold mb-6">
+              Department of Anthropology & Archaeology
+            </h2>
             <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-              Our department is dedicated to advancing understanding of human culture, society, and history through
-              rigorous research and scholarly publication. The Waja Journal serves as a premier platform for
-              disseminating cutting-edge research in anthropological and archaeological studies.
+              Our department is dedicated to advancing understanding of human
+              culture, society, and history through rigorous research and
+              scholarly publication. The Waja Journal serves as a premier
+              platform for disseminating cutting-edge research in
+              anthropological and archaeological studies.
             </p>
-            {/* <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild variant="outline">
-                <Link href="/department">Learn More About Us</Link>
-              </Button>
-              <Button asChild variant="outline">
-                <Link href="/contact">Get in Touch</Link>
-              </Button>
-            </div> */}
           </div>
         </div>
       </section>
