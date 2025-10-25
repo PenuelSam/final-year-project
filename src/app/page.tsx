@@ -3,11 +3,14 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { BookOpen, Search, Users } from "lucide-react"
-import { getLatestVolumes, getFeaturedVolumes } from "@/lib/data"
+import { fetchVolumes, selectFeaturedVolumes, selectLatestVolumes } from "@/lib/data"
 
-export default function HomePage() {
-  const latestVolumes = getLatestVolumes(3)
-  const featuredVolumes = getFeaturedVolumes(3)
+export const dynamic = "force-dynamic"
+
+export default async function HomePage() {
+  const volumes = await fetchVolumes()
+  const latestVolumes = selectLatestVolumes(volumes, 3)
+  const featuredVolumes = selectFeaturedVolumes(volumes, 3)
 
   return (
     <div className="flex flex-col min-h-screen">

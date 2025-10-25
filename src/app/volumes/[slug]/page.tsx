@@ -3,22 +3,21 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Download, ExternalLink, BookOpen, Calendar, User, Hash } from "lucide-react"
-import { getVolumeBySlug, getRelatedVolumes, getAllVolumes } from "@/lib/data"
+import { ArrowLeft, BookOpen, Calendar, User, Hash } from "lucide-react"
+import { fetchVolumes, findVolumeBySlug, selectRelatedVolumes } from "@/lib/data"
+
+export const dynamic = "force-dynamic"
 
 
 
-// Explicitly type generateStaticParams to avoid Promise<any>
-export function generateStaticParams(): { slug: string }[] {
-  return getAllVolumes().map((v) => ({ slug: v.slug }))
-}
 
-// Page component (non-async)
-export default function VolumePage({ params }: { params: { slug: string } }) {
-  const volume = getVolumeBySlug(params.slug)
+export default async function VolumePage({ params }: { params: Promise<{ slug: string }> }) {
+ const { slug } = await params
+  const volumes = await fetchVolumes()
+  const volume = findVolumeBySlug(volumes, slug)
   if (!volume) notFound()
 
-  const relatedVolumes = getRelatedVolumes(volume.id, 3)
+  const relatedVolumes = selectRelatedVolumes(volumes, volume.id, 3)
 
   return (
     <div className="container mx-auto px-4 py-8">

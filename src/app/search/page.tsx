@@ -9,19 +9,25 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Search, Filter, BookOpen, X } from "lucide-react"
-import { getAllVolumes } from "@/lib/data"
+import { useVolumes } from "@/hooks/use-volumes"
 
-import type { Volume } from "@/lib/data";
+import type { Volume } from "@/lib/data"
 
 export default function SearchPage() {
-  const allVolumes = getAllVolumes()
+  const { volumes: allVolumes, loading, error } = useVolumes()
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedYears, setSelectedYears] = useState<string[]>([])
   const [selectedTopics, setSelectedTopics] = useState<string[]>([])
   const [sortBy, setSortBy] = useState("relevance")
 
-  const uniqueYears = [...new Set(allVolumes.map((v) => v.year))].sort((a, b) => b - a)
-  const allTopics = [...new Set(allVolumes.flatMap((v) => v.topics))].sort()
+  const uniqueYears = useMemo(
+    () => [...new Set(allVolumes.map((v) => v.year))].sort((a, b) => b - a),
+    [allVolumes],
+  )
+  const allTopics = useMemo(
+    () => [...new Set(allVolumes.flatMap((v) => v.topics))].sort(),
+    [allVolumes],
+  )
 
 
     const getRelevanceScore = (volume: Volume, term: string) => {
@@ -85,7 +91,9 @@ export default function SearchPage() {
 
  
 
-
+const headerDescription = loading
+    ? "Loading inventory..."
+    : "Search through all volumes, articles, and topics in the Waja Journal collection."
 
   const toggleYear = (year: string) => {
     setSelectedYears((prev) => (prev.includes(year) ? prev.filter((y) => y !== year) : [...prev, year]))
@@ -107,9 +115,7 @@ export default function SearchPage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-4xl font-bold mb-4">Advanced Search</h1>
-        <p className="text-slate-600 text-lg">
-          Search through all volumes, articles, and topics in the Waja Journal collection.
-        </p>
+         <p className="text-slate-600 text-lg">{headerDescription}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -217,56 +223,68 @@ export default function SearchPage() {
 
             <div className="mt-4 flex items-center gap-2 text-sm text-slate-600">
               <Filter className="h-4 w-4" />
-              {filteredVolumes.length} result{filteredVolumes.length !== 1 ? "s" : ""} found
+              {loading
+                ? "Loading inventory..."
+                : `${filteredVolumes.length} result${filteredVolumes.length !== 1 ? "s" : ""} found`}
             </div>
           </div>
 
-          {/* Results */}
-          <div className="space-y-6">
-            {filteredVolumes.map((volume) => (
-              <Card key={volume.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex justify-between items-start mb-2">
-                    <Badge variant="secondary">Volume {volume.number}</Badge>
-                    <span className="text-sm text-slate-500">{volume.year}</span>
-                  </div>
-                  <CardTitle className="text-xl">
-                    <Link href={`/volumes/${volume.slug}`} className="hover:text-blue-600">
-                      {volume.title}
-                    </Link>
-                  </CardTitle>
-                  <CardDescription className="text-base">{volume.summary}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="text-sm text-slate-600">
-                      <strong>Editor:</strong> {volume.editor} • <strong>Articles:</strong> {volume.articles}
-                    </div>
+          {error && !loading && (
+            <div className="text-red-600 bg-red-50 border border-red-100 rounded-lg p-6 mb-6">
+              Unable to load inventory: {error}
+            </div>
+          )}
+          {loading && (
+            <div className="text-center text-slate-500 py-12">Loading search index...</div>
+          )}
 
-                    <div className="flex flex-wrap gap-1">
-                      {volume.topics.map((topic) => (
-                        <Badge key={topic} variant="outline" className="text-xs">
-                          {topic}
-                        </Badge>
-                      ))}
+          {!loading && !error && (
+            <div className="space-y-6">
+              {filteredVolumes.map((volume) => (
+                <Card key={volume.id} className="hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <div className="flex justify-between items-start mb-2">
+                      <Badge variant="secondary">Volume {volume.number}</Badge>
+                      <span className="text-sm text-slate-500">{volume.year}</span>
                     </div>
+                    <CardTitle className="text-xl">
+                      <Link href={`/volumes/${volume.slug}`} className="hover:text-blue-600">
+                        {volume.title}
+                      </Link>
+                    </CardTitle>
+                    <CardDescription className="text-base">{volume.summary}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="text-sm text-slate-600">
+                        <strong>Editor:</strong> {volume.editor} • <strong>Articles:</strong> {volume.articles}
+                      </div>
+
+                      <div className="flex flex-wrap gap-1">
+                        {volume.topics.map((topic) => (
+                          <Badge key={topic} variant="outline" className="text-xs">
+                            {topic}
+                          </Badge>
+                        ))}
+                      </div>
 
                     <div className="flex gap-2">
-                      <Button asChild variant="outline" size="sm">
-                        <Link href={`/volumes/${volume.slug}`}>
-                          <BookOpen className="mr-2 h-4 w-4" />
-                          View Volume
-                        </Link>
-                      </Button>
+                        <Button asChild variant="outline" size="sm">
+                          <Link href={`/volumes/${volume.slug}`}>
+                            <BookOpen className="mr-2 h-4 w-4" />
+                            View Volume
+                          </Link>
+                        </Button>
                     </div>
                   </div>
                 </CardContent>
               </Card>
             ))}
           </div>
-
-          {/* No Results */}
-          {filteredVolumes.length === 0 && (
+          )}
+          
+          {/* No Result */}
+          {!loading && !error && filteredVolumes.length === 0 && (
             <div className="text-center py-12">
               <Search className="h-16 w-16 text-slate-300 mx-auto mb-4" />
               <h3 className="text-xl font-semibold mb-2">No results found</h3>
